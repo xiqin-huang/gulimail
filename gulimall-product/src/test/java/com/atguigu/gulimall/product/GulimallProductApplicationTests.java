@@ -1,7 +1,10 @@
 package com.atguigu.gulimall.product;
 
+
+import com.aliyun.oss.OSS;
+import com.aliyun.oss.OSSClient;
+import com.aliyun.oss.OSSClientBuilder;
 import com.atguigu.gulimall.product.entity.BrandEntity;
-import com.atguigu.gulimall.product.entity.CategoryEntity;
 import com.atguigu.gulimall.product.service.BrandService;
 import com.atguigu.gulimall.product.service.CategoryService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -15,9 +18,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 
@@ -34,9 +35,22 @@ public class GulimallProductApplicationTests {
     @Autowired
     BrandService brandService;
 
+    @Autowired
+    OSSClient ossClient;
 
     @Autowired
     CategoryService categoryService;
+
+    @Test
+    public void testUpload() throws FileNotFoundException {
+
+        //上传文件流
+        InputStream inputStream = new FileInputStream("D:\\java\\谷粒商城\\Guli Mall(包含代码、课件、sql)\\Guli Mall\\分布式基础\\资源\\pics\\0d40c24b264aa511.jpg");
+        ossClient.putObject("gulimall-xiqin","bug1.jpg",inputStream);
+
+        ossClient.shutdown();
+        System.out.println("上传完成");
+    }
 
     @Test
     public void testFindPath(){

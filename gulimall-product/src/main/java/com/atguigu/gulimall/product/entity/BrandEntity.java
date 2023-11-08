@@ -50,6 +50,7 @@ public class BrandEntity implements Serializable {
 	private String descript;
 	/**
 	 * 显示状态[0-不显示；1-显示]
+	 * @Listvalue是自定义注解
 	 */
 //	@Pattern()
 	@NotNull(groups = {AddGroup.class, UpdateStatusGroup.class})
