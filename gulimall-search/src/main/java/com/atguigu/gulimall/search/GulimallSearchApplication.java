@@ -4,6 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 
 /**
  * ClassName: GulimallSearchApplication
@@ -14,6 +15,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
  * @Create: 2023/11/13 - 9:52
  * @Version: v1.0
  */
+@EnableFeignClients
 @SpringBootApplication(exclude= DataSourceAutoConfiguration.class)
 @EnableDiscoveryClient
 public class GulimallSearchApplication {

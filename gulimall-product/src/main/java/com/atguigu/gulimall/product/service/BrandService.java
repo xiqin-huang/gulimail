@@ -1,9 +1,11 @@
 package com.atguigu.gulimall.product.service;
 
+import com.atguigu.gulimall.product.vo.BrandVo;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.atguigu.common.utils.PageUtils;
 import com.atguigu.gulimall.product.entity.BrandEntity;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -19,5 +21,6 @@ public interface BrandService extends IService<BrandEntity> {
 
     void updateDetail(BrandEntity brand);
 
+    List<BrandEntity> getBrandsByIds(List<Long> brandIds);
 }
 
