@@ -1,9 +1,13 @@
 package com.atguigu.gulimall.product;
 
 
+import com.atguigu.gulimall.product.dao.AttrGroupDao;
+import com.atguigu.gulimall.product.dao.SkuSaleAttrValueDao;
 import com.atguigu.gulimall.product.entity.BrandEntity;
 import com.atguigu.gulimall.product.service.BrandService;
 import com.atguigu.gulimall.product.service.CategoryService;
+import com.atguigu.gulimall.product.vo.SkuItemSaleAttrVo;
+import com.atguigu.gulimall.product.vo.SpuItemAttrGroupVo;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
@@ -15,9 +19,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -48,19 +50,32 @@ public class GulimallProductApplicationTests {
     @Autowired
     RedissonClient redissonClient;
 
+    @Autowired
+    AttrGroupDao attrGroupDao;
+
+    @Autowired
+    SkuSaleAttrValueDao skuSaleAttrValueDao;
+
     @Test
-    public void redisson(){
+    public void test() {
+//        List<SpuItemAttrGroupVo> attrGroupWithAttrsBySpuId = attrGroupDao.getAttrGroupWithAttrsBySpuId(6L, 225L);
+        List<SkuItemSaleAttrVo> saleAttrsBySpuId = skuSaleAttrValueDao.getSaleAttrsBySpuId(6l);
+        System.out.println(saleAttrsBySpuId);
+    }
+
+    @Test
+    public void redisson() {
         System.out.println(redissonClient);
     }
 
     @Test
-    public void teststringRedisTemplate(){
+    public void teststringRedisTemplate() {
         ValueOperations<String, String> ops = stringRedisTemplate.opsForValue();
         //保存
-        ops.set("hello","world_"+ UUID.randomUUID().toString());
+        ops.set("hello", "world_" + UUID.randomUUID().toString());
 
         String hello = ops.get("hello");
-        System.out.println("之前保存的数据是："+hello);
+        System.out.println("之前保存的数据是：" + hello);
     }
 
     @Test
@@ -75,9 +90,9 @@ public class GulimallProductApplicationTests {
     }
 
     @Test
-    public void testFindPath(){
+    public void testFindPath() {
         Long[] catelogPath = categoryService.findCatelogPath(225L);
-        log.info("完整路径：{}",Arrays.asList(catelogPath));
+        log.info("完整路径：{}", Arrays.asList(catelogPath));
     }
 
 
