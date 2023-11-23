@@ -15,7 +15,7 @@
 
     <!-- 只要有嵌套属性,就要封装自定义结果集，这里的ID和下面的resultMap对应-->
     <resultMap id="spuAttrGroup" type="com.atguigu.gulimall.product.vo.SpuItemAttrGroupVo">
-        <result property="groupName" column="ag.attr_group_name"></result>
+        <result property="groupName" column="attr_group_name"></result>
         <collection property="attrs" ofType="com.atguigu.gulimall.product.vo.Attr">
             <result property="attrId" column="attr_id"></result>
             <result property="attrName" column="attr_name"></result>
