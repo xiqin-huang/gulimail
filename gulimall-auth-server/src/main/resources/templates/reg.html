@@ -5965,7 +5965,7 @@ Cookie</span>是由网页服务器存放在您的访问设备上的文本文件�
 	</div>
 </header>
 <section>
-	<form action="/register" method="post" class="one">
+	<form action="/regist" method="post" class="one">
 		<!--		<div style="color: red" th:text="${errors != null ? (#maps.containsKey(errors, 'msg') ? errors.msg : '') : ''}">-->
 		<div class="register-box">
 			<label class="username_label">用 户 名
@@ -5973,7 +5973,6 @@ Cookie</span>是由网页服务器存放在您的访问设备上的文本文件�
 			</label>
 			<div class="tips" style="color: red"
 				 th:text="${errors != null ? (#maps.containsKey(errors, 'userName') ? errors.userName : '') : ''}">
-
 			</div>
 		</div>
 		<div class="register-box">
@@ -5982,7 +5981,6 @@ Cookie</span>是由网页服务器存放在您的访问设备上的文本文件�
 			</label>
 			<div class="tips" style="color: red"
 				 th:text="${errors != null ? (#maps.containsKey(errors, 'password') ? errors.password : '') : ''}">
-
 			</div>
 		</div>
 		<div class="register-box">
@@ -6270,7 +6268,7 @@ Cookie</span>是由网页服务器存放在您的访问设备上的文本文件�
 				//正在倒计时中
 			} else {
 				//1、给指定手机号发送验证码
-				$.get("/sms/sendCode?phone=" + $("#phoneNum").val(), function (data) {
+				$.get("/sms/sendcode?phone=" + $("#phoneNum").val(), function (data) {
 					if (data.code !== 0) {
 						alert(data.msg);
 					}

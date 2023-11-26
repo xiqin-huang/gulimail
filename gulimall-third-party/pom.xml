@@ -29,6 +29,10 @@
                     <groupId>com.baomidou</groupId>
                     <artifactId>mybatis-plus-boot-starter</artifactId>
                 </exclusion>
+                <exclusion>
+                    <groupId>org.apache.httpcomponents</groupId>
+                    <artifactId>httpcore</artifactId>
+                </exclusion>
             </exclusions>
         </dependency>
         <dependency>
@@ -44,6 +48,8 @@
             <artifactId>spring-cloud-starter-alicloud-oss</artifactId>
             <version>2.2.0.RELEASE</version>
         </dependency>
+
+<!--短信需要的依赖-->
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
