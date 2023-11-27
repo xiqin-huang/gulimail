@@ -1,4 +1,4 @@
-package com.atguigu.gulimall.auth.Vo;
+package com.atguigu.gulimall.auth.vo;
 
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;

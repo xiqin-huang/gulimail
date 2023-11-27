@@ -4,7 +4,8 @@ import com.alibaba.fastjson.TypeReference;
 import com.atguigu.common.constant.AuthServerConstant;
 import com.atguigu.common.exception.BizCodeEnume;
 import com.atguigu.common.utils.R;
-import com.atguigu.gulimall.auth.Vo.UserRegistVo;
+import com.atguigu.gulimall.auth.vo.UserLoginVo;
+import com.atguigu.gulimall.auth.vo.UserRegistVo;
 import com.atguigu.gulimall.auth.feign.MemberFeignService;
 import com.atguigu.gulimall.auth.feign.ThirdPartFeignService;
 import org.apache.commons.lang.StringUtils;
@@ -124,5 +125,21 @@ public class LoginController {
             attributes.addFlashAttribute("errors", errors);
             return "redirect:http://auth.gulimall.com/reg.html";
         }
+    }
+
+    @PostMapping("/login")
+    public String login(UserLoginVo vo,RedirectAttributes redirectAttributes){
+        R login = memberFeignService.login(vo);
+        if(login.getCode()==0){
+            //成功
+            return "redirect:http://gulimall.com";
+        }else{
+            Map<String,String> errors = new HashMap<>();
+            errors.put("msg",login.getData("msg",new TypeReference<String>(){}));
+            redirectAttributes.addFlashAttribute("errors",errors);
+            return "redirect:http://auth.gulimall.com/login.html";
+        }
+
+
     }
 }

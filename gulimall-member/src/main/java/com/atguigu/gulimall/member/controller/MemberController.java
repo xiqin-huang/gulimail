@@ -7,7 +7,9 @@ import com.atguigu.common.exception.BizCodeEnume;
 import com.atguigu.gulimall.member.exception.PhoneExistException;
 import com.atguigu.gulimall.member.exception.UsernameExistException;
 import com.atguigu.gulimall.member.feign.CouponFeignService;
+import com.atguigu.gulimall.member.vo.MemberLoginVo;
 import com.atguigu.gulimall.member.vo.MemberRegistVo;
+import com.atguigu.gulimall.member.vo.SocialUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jta.bitronix.BitronixXAConnectionFactoryWrapper;
 import org.springframework.web.bind.annotation.*;
@@ -35,6 +37,16 @@ public class MemberController {
     @Autowired
     CouponFeignService couponFeignService;
 
+    @PostMapping("/oauth/login")
+    public R oauthlogin(@RequestBody SocialUser socialUser) throws Exception {
+        MemberEntity entity = memberService.login(socialUser);
+        if(entity != null){
+            return R.ok().setData(entity);
+        }else {
+            return R.error(BizCodeEnume.LOGINACCT_PASSWORD_INVALID_EXCEPTION.getCode(), BizCodeEnume.LOGINACCT_PASSWORD_INVALID_EXCEPTION.getMsg());
+        }
+    }
+
     @RequestMapping("/coupons")
     public R test(){
         MemberEntity memberEntity = new MemberEntity();
@@ -43,6 +55,18 @@ public class MemberController {
         R membercoupons = couponFeignService.membercoupons();
         return R.ok().put("member",memberEntity).put("coupons",membercoupons.get("coupons"));
     }
+
+
+    @PostMapping("/login")
+    public R login(@RequestBody MemberLoginVo vo){
+        MemberEntity entity = memberService.login(vo);
+        if(entity != null){
+            return R.ok();
+        }else {
+            return R.error(BizCodeEnume.LOGINACCT_PASSWORD_INVALID_EXCEPTION.getCode(), BizCodeEnume.LOGINACCT_PASSWORD_INVALID_EXCEPTION.getMsg());
+        }
+    }
+
 
 
     @PostMapping("/regist")
