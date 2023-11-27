@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 
 /**
  * ClassName: GulimallSearchApplication
@@ -15,6 +16,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
  * @Create: 2023/11/13 - 9:52
  * @Version: v1.0
  */
+@EnableRedisHttpSession
 @EnableFeignClients
 @SpringBootApplication(exclude= DataSourceAutoConfiguration.class)
 @EnableDiscoveryClient

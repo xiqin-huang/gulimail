@@ -1,8 +1,9 @@
-package com.atguigu.gulimall.auth.vo;
+package com.atguigu.common.vo;
 
 import lombok.Data;
 import lombok.ToString;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -16,7 +17,7 @@ import java.util.Date;
  */
 @ToString
 @Data
-public class MemberRespVo {
+public class MemberRespVo implements Serializable {
     private Long id;
     /**
      * 会员等级id

@@ -2,10 +2,11 @@ package com.atguigu.gulimall.auth.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
+import com.atguigu.common.constant.AuthServerConstant;
 import com.atguigu.common.utils.HttpUtils;
 import com.atguigu.common.utils.R;
 import com.atguigu.gulimall.auth.feign.MemberFeignService;
-import com.atguigu.gulimall.auth.vo.MemberRespVo;
+import com.atguigu.common.vo.MemberRespVo;
 import com.atguigu.gulimall.auth.vo.SocialUser;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpResponse;
@@ -63,7 +64,6 @@ public class OAuth2Controller {
             //调用远程服务
             R oauthLogin = memberFeignService.oauthlogin(socialUser);
             if (oauthLogin.getCode() == 0) {
-                //暂时获取不到这个数据，好像是因为没有setData
                 MemberRespVo data = oauthLogin.getData("data", new TypeReference<MemberRespVo>() {
                 });
                 log.info("登录成功，data为{}",data.toString());
@@ -71,7 +71,7 @@ public class OAuth2Controller {
                 //以后浏览器访问哪个网站就会带上这个网站的cookie
                 //TODO 1、默认发的令牌。当前域（解决子域session共享问题）
                 //TODO 2、使用JSON的序列化方式来序列化对象到Redis中
-                //session.setAttribute(LOGIN_USER, data);
+                session.setAttribute(AuthServerConstant.LOGIN_USER, data);
 
                 //2、登录成功跳回首页
                 return "redirect:http://gulimall.com";
