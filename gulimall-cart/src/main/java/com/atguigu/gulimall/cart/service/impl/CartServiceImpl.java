@@ -18,6 +18,7 @@ import org.springframework.data.redis.core.BoundHashOperations;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -53,7 +54,7 @@ public class CartServiceImpl implements CartService {
     public CartItem addToCart(Long skuId, Integer num) throws ExecutionException, InterruptedException {
         BoundHashOperations<String, Object, Object> cartOps = getCartOps();
         String res = (String) cartOps.get(skuId.toString());
-        if(StringUtils.isEmpty(res)){
+        if (StringUtils.isEmpty(res)) {
             CartItem cartItem = new CartItem();
             //购物车中没有该商品
             //远程查询当前要添加的商品信息
@@ -68,7 +69,7 @@ public class CartServiceImpl implements CartService {
                 cartItem.setTitle(data.getSkuTitle());
                 cartItem.setSkuId(skuId);
                 cartItem.setPrice(data.getPrice());
-            },executor);
+            }, executor);
 
             //远程查询SKU的组合信息
             CompletableFuture<Void> getSkuAttrValuesFuture = CompletableFuture.runAsync(() -> {
@@ -84,13 +85,13 @@ public class CartServiceImpl implements CartService {
             cartOps.put(skuId.toString(), cartItemJson);
 
             return cartItem;
-        }else {
+        } else {
             //购物车有此商品，修改数量即可
             CartItem cartItem = JSON.parseObject(res, CartItem.class);
             cartItem.setCount(cartItem.getCount() + num);
             //修改redis的数据
             String cartItemJson = JSON.toJSONString(cartItem);
-            cartOps.put(skuId.toString(),cartItemJson);
+            cartOps.put(skuId.toString(), cartItemJson);
 
             return cartItem;
         }
@@ -119,7 +120,7 @@ public class CartServiceImpl implements CartService {
             if (tempCartItems != null) {
                 //临时购物车有数据需要进行合并操作
                 for (CartItem item : tempCartItems) {
-                    addToCart(item.getSkuId(),item.getCount());
+                    addToCart(item.getSkuId(), item.getCount());
                 }
                 //清除临时购物车的数据
                 clearCartInfo(temptCartKey);
@@ -151,13 +152,13 @@ public class CartServiceImpl implements CartService {
         //查询购物车里面的商品
         CartItem cartItem = getCartItem(skuId);
         //修改商品状态
-        cartItem.setCheck(check == 1?true:false);
+        cartItem.setCheck(check == 1 ? true : false);
 
         //序列化存入redis中
         String redisValue = JSON.toJSONString(cartItem);
 
         BoundHashOperations<String, Object, Object> cartOps = getCartOps();
-        cartOps.put(skuId.toString(),redisValue);
+        cartOps.put(skuId.toString(), redisValue);
     }
 
     @Override
@@ -170,12 +171,13 @@ public class CartServiceImpl implements CartService {
         BoundHashOperations<String, Object, Object> cartOps = getCartOps();
         //序列化存入redis中
         String redisValue = JSON.toJSONString(cartItem);
-        cartOps.put(skuId.toString(),redisValue);
+        cartOps.put(skuId.toString(), redisValue);
     }
 
 
     /**
      * 删除购物项
+     *
      * @param skuId
      */
     @Override
@@ -183,6 +185,27 @@ public class CartServiceImpl implements CartService {
 
         BoundHashOperations<String, Object, Object> cartOps = getCartOps();
         cartOps.delete(skuId.toString());
+    }
+
+    @Override
+    public List<CartItem> getUserCartItems() {
+        UserInfoTo userInfoTo = CartInterceptor.threadLocal.get();
+
+        if (userInfoTo.getUserId() == null) {
+            return null;
+        } else {
+            String cartKey = CART_PREFIX + userInfoTo.getUserId();
+            List<CartItem> cartItems = getCartItems(cartKey);
+            List<CartItem> collect = cartItems.stream().filter(item -> item.getCheck()).map(item -> {
+                        //更新为最新价格
+                        R price = productFeignService.getPrice(item.getSkuId());
+                        String  data = (String) price.get("data");
+                        item.setPrice(new BigDecimal(data));
+                        return item;
+                    })
+                    .collect(Collectors.toList());
+            return collect;
+        }
     }
 
     private List<CartItem> getCartItems(String cartKey) {
@@ -199,7 +222,6 @@ public class CartServiceImpl implements CartService {
         }
         return null;
     }
-
 
 
     //获取到需要操作的购物车
