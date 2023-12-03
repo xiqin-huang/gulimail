@@ -1,6 +1,7 @@
 package com.atguigu.gulimall.order.service.impl;
 
 import com.alibaba.fastjson.TypeReference;
+import com.atguigu.common.exception.NoStockException;
 import com.atguigu.common.utils.R;
 import com.atguigu.common.vo.MemberRespVo;
 import com.atguigu.gulimall.order.constant.OrderConstant;
@@ -177,8 +178,8 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
                     response.setOrder(order.getOrder());
                     return response;
                 }else {
-                    response.setCode(3);
-                    return response;
+                    String msg = (String) r.get("msg");
+                    throw new NoStockException(msg);
                 }
             }else {
                 response.setCode(2);
