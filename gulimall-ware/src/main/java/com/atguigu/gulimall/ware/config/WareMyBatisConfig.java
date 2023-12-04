@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Configuration
 public class WareMyBatisConfig {
 
+
     //引入分页插件
     @Bean
     public PaginationInterceptor paginationInterceptor() {
